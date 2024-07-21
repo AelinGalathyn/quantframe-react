@@ -41,6 +41,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^13.0.3",
     "react-router-dom": "^6.14.2",
+    "rustc": "^1.74.0",
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {

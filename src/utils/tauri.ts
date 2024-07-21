@@ -3,7 +3,7 @@ import { listen } from "@tauri-apps/api/event";
 import { ComposedListener } from "./listener/Composed.listener";
 import { invoke } from "@tauri-apps/api";
 import { ProgressReport } from "../types";
-import { notifications } from "@mantine/notifications";
+import { notifications, NotificationProps } from "@mantine/notifications";
 import i18next from "i18next";
 
 const listener = new ComposedListener();
@@ -124,7 +124,7 @@ export const SendDiscordNotification = async (title: string, content: string, we
 
 OnTauriEvent("Client:Update:Progress", (data: ProgressReport) => {
   const { id, title, i18n_key, isCompleted, values } = data;
-  let notification = {
+  let notification: NotificationProps & {id: string} = {
     id,
     title,
     message: i18next.t(`progress.${i18n_key}`, values),
