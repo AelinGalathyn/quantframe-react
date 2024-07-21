@@ -124,19 +124,40 @@ export const SendDiscordNotification = async (title: string, content: string, we
 
 OnTauriEvent("Client:Update:Progress", (data: ProgressReport) => {
   const { id, title, i18n_key, isCompleted, values } = data;
-  let notification: NotificationProps & {id: string} = {
+
+  // Ensure that i18next.t returns a string
+  const message = i18next.t(`progress.${i18n_key}`, values) as string;
+
+  // Construct the notification object
+  const notification: NotificationProps & { id: string } = {
     id,
     title,
-    message: i18next.t(`progress.${i18n_key}`, values),
+    message,
     autoClose: isCompleted,
     withCloseButton: false,
-  }
-  if (!progress[data.id])
+  };
+
+  // Check if the notification already exists
+  if (!progress[data.id]) {
+    // Show new notification
     notifications.show(notification);
-  else
-    notifications.update(notification);
-  if (isCompleted)
-    delete progress[data.id];
-  else
+    // Mark as shown
     progress[data.id] = data;
+  } else {
+    // Update existing notification
+    notifications.update({
+      id: notification.id,
+      title: notification.title,
+      message: notification.message,
+      autoClose: notification.autoClose,
+      withCloseButton: notification.withCloseButton,
+    });
+  }
+
+  // Remove completed progress from tracking
+  if (isCompleted) {
+    delete progress[data.id];
+  } else {
+    progress[data.id] = data;
+  }
 });
