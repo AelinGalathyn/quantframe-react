@@ -33,6 +33,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
+          
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install Rust (Stable)
         run: |
